@@ -9,13 +9,12 @@ export default function PostCardGrid({posts, users}) {
     }
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-3 w-screen gap-10 p-10">
+        <div className="grid grid-cols-1 sm:grid-cols-3 w-screen gap-2 sm:gap-10 p-10">
             {posts.map(post => (
                 <PostCard 
-                    author = {getUsernamebyId(post.author)}
                     title = {post.ticket}
                     price = {post.ticket_price}
-                    description={post.description}
+                    created_at={post.created_at.date}
                 />
             ))}
         </div>

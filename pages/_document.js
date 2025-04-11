@@ -7,6 +7,7 @@ export default function Document() {
       <Head />
       <body className="antialiased bg-gray-900">
         <Navbar/>
+        <div className="pt-20"></div>
         <Main />
         <NextScript />
       </body>
