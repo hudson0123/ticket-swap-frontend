@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
+import api from '@/api'
 
 export default function AdminPostList() {
 
@@ -10,50 +11,25 @@ export default function AdminPostList() {
 
 
     useEffect(() => {
-        const token_url = "http://localhost:8000/api/token/";
-        fetch(token_url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                username: "",
-                password: "",
-            }),
-        }).then((res) => res.json()).then((json) => setJwt(json)).catch((err) => console.error(err))
-    }, [])
+        const fetchData = async () => {
+            try {
+                const users_res = await api.get('api/users')
+                const posts_res = await api.get('api/posts')
 
-    useEffect(() => {
-        const users_url = "http://localhost:8000/api/users/random/";
-        if (jwt !== null) { // Only fetch if JWT is set
-            console.log(jwt)
-            fetch(users_url, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer " + jwt.access,
-                }
-            }).then((res) => res.json()).then((json) => setUsers(json)).catch((err) => console.error(err))
-            console.log(users)
+                console.log(users_res.data)
+                console.log(posts_res.data)
+                setUsers(users_res.data)
+                setPosts(posts_res.data)
+            } catch (e) {
+                alert(e)
+            }
         }
-    }, [jwt]);
-
-    useEffect(() => {
-        const posts_url = "http://localhost:8000/api/posts/";
-        if (jwt !== null) {
-            fetch(posts_url, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer " + jwt.access,
-                }
-            }).then((res) => res.json()).then((json) => setPosts(json)).catch((err) => console.error(err))
-        }
-    }, [jwt]);
+        fetchData()
+    }, []);
 
     function getUsernamebyId(id) {
         const user = users.find(u => u.id === id)
-        return user ? user.username : "Loading.."
+        return user ? user.username : "Loading..."
     }
 
     return (
