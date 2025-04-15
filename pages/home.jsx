@@ -17,9 +17,7 @@ export default function home() {
             try {
                 const users_res = await api.get('api/users')
                 const posts_res = await api.get('api/posts')
-
                 console.log(users_res.data)
-                console.log(posts_res.data)
                 setUsers(users_res.data)
                 setPosts(posts_res.data)
             } catch (e) {
@@ -35,7 +33,7 @@ export default function home() {
 
     return (
         <div className="flex flex-col">
-            <div className="flex flex-col justify-center h-16 mx-10">
+            <div className="flex flex-col justify-center items-center h-16 mx-10">
                 <input 
                     type="text" 
                     value={searchTerm}

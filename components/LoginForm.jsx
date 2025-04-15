@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { useRouter } from 'next/router'
 import api from '@/api'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/constants'
@@ -30,8 +30,8 @@ export default function LoginForm() {
     }
 
     return (
-        <form className="m-10 bg-white w-fit p-3 rounded" onSubmit={handleSubmit}>
-            <h1 className="text-black font-bold mb-5 text-2xl">Login</h1>
+        <form className=" h-fit m-10 w-fit p-3 rounded border border-white" onSubmit={handleSubmit}>
+            <h1 className="text-white font-bold mb-5 text-2xl">Login</h1>
             <input
                 type="text"
                 value={username}
@@ -46,10 +46,10 @@ export default function LoginForm() {
                 placeholder="Password"
                 className="border border-black bg-white block rounded mb-5 py-1 px-2"
             />
-            <button type="submit" className="text-black border-1 mb-3 black py-1 px-2 hover:border-gray-300 transition duration-200">
+            <button type="submit" className="text-white border-1 mb-3 black py-1 px-2 hover:border-gray-300 transition duration-200">
                 {loading ? "Loading..." : "Login"}
             </button>
-            <p className="text-sm">Don't Have an account? Register <a className="italic " href="/register">here</a>.</p>
+            <p className="text-sm text-white">Don't Have an account? Register <a className="italic " href="/register">here</a>.</p>
         </form>
     )
 }

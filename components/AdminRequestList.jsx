@@ -5,7 +5,6 @@ import api from '@/api'
 export default function AdminRequestList() {
 
     const [users, setUsers] = useState([])
-    const [posts, setPosts] = useState([])
     const [requests, setRequests] = useState([])
 
 
@@ -13,11 +12,9 @@ export default function AdminRequestList() {
         const fetchData = async () => {
             try {
                 const users_res = await api.get('api/users')
-                const posts_res = await api.get('api/posts')
                 const requests_res = await api.get('api/requests')
 
                 setUsers(users_res.data)
-                setPosts(posts_res.data)
                 setRequests(requests_res.data)
             } catch (e) {
                 alert(e)

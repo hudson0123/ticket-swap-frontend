@@ -31,8 +31,8 @@ export default function LoginForm() {
     }
 
     return (
-        <form className="m-10 bg-white w-fit p-3 rounded" onSubmit={handleSubmit}>
-            <h1 className="text-black font-bold mb-5 text-2xl">Register</h1>
+        <form className="m-10 w-fit p-3 rounded border border-white" onSubmit={handleSubmit}>
+            <h1 className="text-white font-bold mb-5 text-2xl">Register</h1>
             <input
                 type="text"
                 value={username}
@@ -73,10 +73,10 @@ export default function LoginForm() {
                 className="border border-black bg-white rounded block mb-5 py-1 px-2"
 
             />
-            <button type="submit" className="text-black border-1 mb-3 black py-1 px-2 hover:border-gray-300 transition duration-200">
+            <button type="submit" className="text-white border-1 mb-3 black py-1 px-2 hover:border-gray-300 transition duration-200">
                 {loading ? "Loading..." : "Register"}
             </button>
-            <p className="text-sm">Already have an account? Login <a className="italic " href="/login">here</a>.</p>
+            <p className="text-sm text-white">Already have an account? Login <a className="italic " href="/login">here</a>.</p>
         </form>
     )
 }

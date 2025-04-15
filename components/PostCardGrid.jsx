@@ -1,20 +1,30 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { ACCESS_TOKEN } from '@/constants'
+import { jwtDecode } from 'jwt-decode'
+import api from '@/api'
 import PostCard from './PostCard'
 
 export default function PostCardGrid({posts, users}) {
 
-    function getUsernamebyId(id) {
-        const user = users.find(u => u.id === id)
-        return user ? user.username : "Loading.."
-    }
+    const [currentUser, setCurrentUser] = useState("")
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const token = localStorage.getItem(ACCESS_TOKEN)
+            const current_user_id = jwtDecode(token).user_id
+            const res2 = await api.get('/api/users/' + current_user_id + '/')
+            setCurrentUser(res2.data)
+        }
+        fetchData()
+    }, [])
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-3 w-screen gap-2 sm:gap-10 p-10">
+        <div className="grid grid-cols-1 w-screen place-items-center gap-2 sm:gap-10 p-10">
             {posts.map(post => (
                 <PostCard 
-                    title = {post.ticket}
-                    price = {post.ticket_price}
-                    created_at={post.created_at.date}
+                    post = {post}
+                    users = {users}
+                    currentUser={currentUser}
                 />
             ))}
         </div>

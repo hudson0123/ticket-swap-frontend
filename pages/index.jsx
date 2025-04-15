@@ -4,6 +4,8 @@ import PostCardGrid from '@/components/PostCardGrid';
 export default function Home() {
 
   return (
-      <h1>Welcome to the landing page.</h1>
+    <div className="flex justify-center items-center h-screen">
+      <h1 className="text-white text-3xl">Welcome to the landing page.</h1>
+    </div>
   );
 };
