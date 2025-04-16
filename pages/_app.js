@@ -3,6 +3,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import { useRouter } from 'next/router'
 import { PROTECTED_ROUTES } from "@/constants";
 import Navbar from "@/components/Navbar";
+import ErrorBanner from "@/components/ErrorBanner";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter()
@@ -14,6 +15,7 @@ export default function App({ Component, pageProps }) {
     <ProtectedRoute>
       <Navbar />
       <div className="pt-20"></div>
+      <ErrorBanner />
       <Component {...pageProps} />
     </ProtectedRoute>
   ) : (

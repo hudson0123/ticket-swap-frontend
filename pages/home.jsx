@@ -17,7 +17,6 @@ export default function home() {
             try {
                 const users_res = await api.get('api/users')
                 const posts_res = await api.get('api/posts')
-                console.log(users_res.data)
                 setUsers(users_res.data)
                 setPosts(posts_res.data)
             } catch (e) {

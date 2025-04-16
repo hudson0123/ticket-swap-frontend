@@ -1,8 +1,7 @@
 import React from 'react'
 import { useState, useContext } from 'react'
 import { useRouter } from 'next/router'
-import api from '@/api'
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/constants'
+import { useAuthStore } from '@/store'
 
 export default function LoginForm() {
 
@@ -16,11 +15,7 @@ export default function LoginForm() {
         e.preventDefault()
 
         try {
-            localStorage.clear()
-            const res = await api.post('/api/token/', {"username": username, "password": password})
-            localStorage.setItem(ACCESS_TOKEN, res.data.access)
-            localStorage.setItem(REFRESH_TOKEN, res.data.refresh)
-            router.push('/home')
+            useAuthStore.getState().login(username, password)
         } catch (e) {
             alert(e)
         } finally {
