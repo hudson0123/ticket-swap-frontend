@@ -5,6 +5,12 @@ import api from '@/api'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/constants'
 import { jwtDecode } from 'jwt-decode'
 
+export const useAccountStore = create(
+    (set) => ({
+        
+    })
+)
+
 export const useAuthStore = create(
     persist(
         (set) => ({

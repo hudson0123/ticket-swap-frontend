@@ -3,7 +3,7 @@ export default function ExpandableSection({ id, title, boxExpanded, handleExpand
     return (
       <div className="flex flex-col bg-white w-full rounded px-5 py-2">
         <div className="relative flex items-center">
-          <p className="">{title}</p>
+          <p className="font-bold">{title}</p>
           <button onClick={() => handleExpand(isExpanded ? "0" : id)} className="ml-auto">
             <img src="dropdown.svg" alt="dropdown-icon" className={`h-10 w-10 transition-transform duration-150 ${isExpanded ? 'rotate-180' : 'rotate-0'}`} />
           </button>

@@ -1,5 +1,5 @@
 import React from 'react'
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import PostCardGrid from '@/components/PostCardGrid'
 import api from '@/api'
 import { useNotifyStore } from '@/store'
@@ -9,6 +9,7 @@ export default function home() {
     const [users, setUsers] = useState([])
     const [posts, setPosts] = useState([])
     const [searchTerm, setSearchTerm] = useState("")
+    const [toggleSearchBar, setToggleSearchBar] = useState("invisible")
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,16 +30,26 @@ export default function home() {
         setSearchTerm(event.target.value)
     }
 
+    const handleSearchBar = () => {
+        toggleSearchBar === "" ? setToggleSearchBar("invisible") : setToggleSearchBar("")
+    }
+
     return (
         <div className="flex flex-col">
-            <div className="flex flex-col justify-center items-center h-16 mx-10">
-                <input 
-                    type="text" 
+            <div className="flex items-center gap-3 mx-5">
+                <img
+                    className="w-6 h-6 cursor-pointer fixed bottom-4 left-4"
+                    src="/search.svg"
+                    onClick={handleSearchBar}
+                    alt="Search icon"
+                />
+                <input
+                    type="text"
                     value={searchTerm}
                     onChange={handleSearch}
-                    className="bg-white rounded-full p-2" 
-                    placeholder="Search.."
-                    ></input>
+                    className={`bg-gray-200 rounded-full p-2 px-4 flex-1 transition-all duration-300 ease-in-out ${toggleSearchBar}`}
+                    placeholder="Search..."
+                />
             </div>
             <PostCardGrid
                 posts={posts.filter((post) => post.ticket.toLowerCase().includes(searchTerm.toLowerCase()))}

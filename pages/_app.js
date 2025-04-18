@@ -14,14 +14,14 @@ export default function App({ Component, pageProps }) {
   return isProtected ? (
     <ProtectedRoute>
       <Navbar />
-      <div className="pt-20"></div>
+      <div className="pt-10"></div>
       <NotifyBanner />
       <Component {...pageProps} />
     </ProtectedRoute>
   ) : (
     <>
       <Navbar />
-      <div className="pt-20"></div>
+      <div className="pt-10"></div>
       <NotifyBanner />
       <Component {...pageProps} />
     </>
