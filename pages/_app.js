@@ -3,11 +3,11 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import { useRouter } from 'next/router'
 import { PROTECTED_ROUTES } from "@/constants";
 import Navbar from "@/components/Navbar";
-import ErrorBanner from "@/components/ErrorBanner";
+import NotifyBanner from "@/components/NotifyBanner";
 
 export default function App({ Component, pageProps }) {
-  const router = useRouter()
 
+  const router = useRouter()
   const isProtected = PROTECTED_ROUTES.includes(router.pathname)
 
 
@@ -15,13 +15,14 @@ export default function App({ Component, pageProps }) {
     <ProtectedRoute>
       <Navbar />
       <div className="pt-20"></div>
-      <ErrorBanner />
+      <NotifyBanner />
       <Component {...pageProps} />
     </ProtectedRoute>
   ) : (
     <>
       <Navbar />
       <div className="pt-20"></div>
+      <NotifyBanner />
       <Component {...pageProps} />
     </>
   )

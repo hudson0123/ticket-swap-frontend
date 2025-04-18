@@ -1,27 +1,25 @@
-import React from 'react'
-import { useState, useContext } from 'react'
-import { useRouter } from 'next/router'
-import { useAuthStore } from '@/store'
+import { useAuthStore, useNotifyStore } from '@/store'
+import { useState } from 'react'
 
 export default function LoginForm() {
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [loading, setLoading] = useState(false)
-    const router = useRouter()
 
     const handleSubmit = async (e) => {
         setLoading(true)
         e.preventDefault()
 
         try {
-            useAuthStore.getState().login(username, password)
+            await useAuthStore.getState().login(username, password)
         } catch (e) {
-            alert(e)
+            const setError = useNotifyStore.getState.setError
+            setError("Failed to Login.")
         } finally {
             setLoading(false)
         }
-
+        
     }
 
     return (

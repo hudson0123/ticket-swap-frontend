@@ -11,7 +11,7 @@ export default function Navbar() {
     const current_user = useAuthStore((state) => state.current_user)
 
     return (
-        <nav className="border-gray-200 bg-gray-900 fixed w-full">
+        <nav className="border-gray-200 bg-gray-900 fixed w-full border-b-2">
             <div className="flex flex-wrap items-center justify-between mx-auto p-4 px-10">
                 <a href={auth_status ? "/home" : "/"} className="flex items-center space-x-3 rtl:space-x-reverse">
                     <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">UniSwap</span>
@@ -32,10 +32,10 @@ export default function Navbar() {
                                     </li>
                                 )}
                                 <li>
-                                    <a href="/account"><img className="w-10 h-10 border-3 mr-2 border-white rounded-full " src="/profile.svg" alt="user-profile" /></a>
+                                    <a href={"/" + current_user.username}><img className="w-10 h-10 border-3 mr-2 border-white rounded-full " src="/profile.svg" alt="user-profile" /></a>
                                 </li>
                                 <li>
-                                    <a href="/account" className="text-white hover:underline">@{current_user.username}</a>
+                                    <a href={"/" + current_user.username} className="text-white hover:underline">@{current_user.username}</a>
                                 </li>
                             </>
                         ) : (

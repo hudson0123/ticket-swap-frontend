@@ -20,28 +20,72 @@ export const useAuthStore = create(
                 console.log("RUNNING LOGIN")
                 localStorage.clear()
                 set({ status: true })
-                const token_res = await api.post('/api/token/', { "username": username, "password": password })
-                localStorage.setItem(ACCESS_TOKEN, token_res.data.access)
-                localStorage.setItem(REFRESH_TOKEN, token_res.data.refresh)
-                const decoded = jwtDecode(token_res.data.access)
-                const user_data_res = await api.get('/api/users/' + decoded.user_id + '/')
-                set({current_user: user_data_res.data})
-                console.log(user_data_res.data)
-                router.push('/home')
+                try {
+                    const token_res = await api.post('/api/token/', { "username": username, "password": password })
+                    localStorage.setItem(ACCESS_TOKEN, token_res.data.access)
+                    localStorage.setItem(REFRESH_TOKEN, token_res.data.refresh)
+                    const decoded = jwtDecode(token_res.data.access)
+                    const user_data_res = await api.get('/api/users/' + decoded.user_id + '/')
+                    const user_id = user_data_res.data.id
+                    if (user_data_res.data.last_login === null) {
+                        const setInfo = useNotifyStore.getState().setInfo
+                        setInfo("Welcome to UniSwap! This is the Home Page, where you will find current listings for tickets.")
+                    }
+                    set({ current_user: user_data_res.data })
+                    await api.patch('/api/users/' + user_id + "/", {
+                        "last_login": new Date()
+                    })
+                    router.push('/home')
+                } catch {
+                    const setError = useNotifyStore.getState().setError
+                    setError("Login Failed")
+                }
+            },
+            refreshCurrentUser: async () => {
+                try {
+                    const token = localStorage.getItem(ACCESS_TOKEN)
+                    const decoded = jwtDecode(token)
+                    const user_data_res = await api.get('/api/users/' + decoded.user_id + '/')
+                    set({ current_user: user_data_res.data })
+                } catch {
+                    const setError = useNotifyStore.getState().setError
+                    setError("Failed to get Current User")
+                }
             }
         }), {
-            name: 'auth-storage'
-        }
+        name: 'auth-storage'
+    }
     ))
 
-export const useErrorStore = create(
+export const useNotifyStore = create(
     (set) => ({
         error: null,
+        warn: null,
+        info: null,
+        success: null,
         setError: (error) => {
-            set({error: error})
+            set({ error: error })
+        },
+        setWarn: (warn) => {
+            set({ warn: warn })
+        },
+        setInfo: (info) => {
+            set({ info: info })
+        },
+        setSuccess: (success) => {
+            set({ success: success })
         },
         clearError: () => {
-            set({error: null})
+            set({ error: null })
+        },
+        clearWarn: () => {
+            set({ warn: null })
+        },
+        clearInfo: () => {
+            set({ info: null })
+        },
+        clearSuccess: () => {
+            set({ success: null })
         }
     })
 )
