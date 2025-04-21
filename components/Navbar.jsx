@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { ACCESS_TOKEN } from '@/constants'
 import { useAuthStore } from '@/store'
 
 export default function Navbar() {
@@ -10,12 +9,17 @@ export default function Navbar() {
     const auth_status = useAuthStore((state) => state.status)
     const current_user = useAuthStore((state) => state.current_user)
 
+    if (!current_user) {
+        return
+    }
+
     return (
         <nav className="border-gray-200 bg-gray-900 fixed w-full border-b-2 z-99">
             <div className="flex flex-wrap items-center justify-between mx-auto p-4 px-10">
                 <a href={auth_status ? "/home" : "/"} className="flex items-center space-x-3 rtl:space-x-reverse">
                     <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">UniSwap</span>
-                </a>                    {auth_status ? (
+                </a>
+                {auth_status ? (
                     <div className='flex justify-end items-center'>
                         <a href={"/" + current_user.username} className="invisible md:visible text-white hover:underline">@{current_user.username}</a>
                         <a href={"/" + current_user.username}><img className="w-10 h-10 border-3 ml-2 border-white rounded-full " src="/profile.svg" alt="user-profile" /></a>

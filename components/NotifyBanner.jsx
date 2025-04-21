@@ -4,22 +4,15 @@ import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
-import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
-export default function ErrorBanner() {
 
-    const error = useNotifyStore((state) => state.error)
-    const warn = useNotifyStore((state) => state.warn)
-    const info = useNotifyStore((state) => state.info)
-    const success = useNotifyStore((state) => state.success)
-    const clear_error = useNotifyStore((state) => state.clearError)
-    const clear_warn = useNotifyStore((state) => state.clearWarn)
-    const clear_info = useNotifyStore((state) => state.clearInfo)
-    const clear_success = useNotifyStore((state) => state.clearSuccess)
+export default function NotificationBanner() {
+
+    const notification = useNotifyStore()
 
     return (
         <div className='fixed w-screen'>
-            {error !== null ? (
+            {notification.error !== null ? (
                 <Box sx={{ width: '100%'}}>
                     <Collapse in={open}>
                         <Alert
@@ -28,7 +21,7 @@ export default function ErrorBanner() {
                                     aria-label="close"
                                     color="inherit"
                                     size="small"
-                                    onClick={clear_error}
+                                    onClick={notification.clearNotification("error")}
                                 >
                                     <CloseIcon fontSize="inherit" />
                                 </IconButton>
@@ -36,11 +29,11 @@ export default function ErrorBanner() {
                             sx={{ mb: 2, pl: 3 }}
                             severity="error"
                         >
-                            {error}
+                            {notification.error}
                         </Alert>
                     </Collapse>
                 </Box>
-            ) : warn !== null ? (
+            ) : notification.warn !== null ? (
                 <Box sx={{ width: '100%' }}>
                     <Collapse in={open}>
                         <Alert
@@ -49,7 +42,7 @@ export default function ErrorBanner() {
                                     aria-label="close"
                                     color="inherit"
                                     size="small"
-                                    onClick={clear_warn}
+                                    onClick={notification.clearNotification("warn")}
                                 >
                                     <CloseIcon fontSize="inherit" />
                                 </IconButton>
@@ -57,11 +50,11 @@ export default function ErrorBanner() {
                             sx={{ mb: 2 }}
                             severity="warning"
                         >
-                            {warn}
+                            {notification.warn}
                         </Alert>
                     </Collapse>
                 </Box>
-            ) : info !== null ? (
+            ) : notification.info !== null ? (
                 <Box sx={{ width: '100%' }}>
                     <Collapse in={open}>
                         <Alert
@@ -70,7 +63,7 @@ export default function ErrorBanner() {
                                     aria-label="close"
                                     color="inherit"
                                     size="small"
-                                    onClick={clear_info}
+                                    onClick={notification.clearNotification("info")}
                                 >
                                     <CloseIcon fontSize="inherit" />
                                 </IconButton>
@@ -78,11 +71,11 @@ export default function ErrorBanner() {
                             sx={{ mb: 2 }}
                             severity="info"
                         >
-                            {info}
+                            {notification.info}
                         </Alert>
                     </Collapse>
                 </Box>
-            ) : success !== null ? (
+            ) : notification.success !== null ? (
                 <Box sx={{ width: '100%' }}>
                     <Collapse in={open}>
                         <Alert
@@ -91,7 +84,7 @@ export default function ErrorBanner() {
                                     aria-label="close"
                                     color="inherit"
                                     size="small"
-                                    onClick={clear_success}
+                                    onClick={notification.clearNotification("success")}
                                 >
                                     <CloseIcon fontSize="inherit" />
                                 </IconButton>
@@ -99,7 +92,7 @@ export default function ErrorBanner() {
                             sx={{ mb: 2 }}
                             severity="success"
                         >
-                            {success}
+                            {notification.success}
                         </Alert>
                     </Collapse>
                 </Box>

@@ -53,11 +53,11 @@ export default function AccountPage() {
                 <NotificationsSection />
               </ExpandableSection>
 
-              {/* <ExpandableSection id="3" title="Requests" boxExpanded={boxExpanded} handleExpand={handleExpand}>
+              <ExpandableSection id="3" title="Requests" boxExpanded={boxExpanded} handleExpand={handleExpand}>
                 <div>
                   <RequestsSection accountUser={accountUser} />
                 </div>
-              </ExpandableSection> */}
+              </ExpandableSection>
             </div>
           )}
         </div>

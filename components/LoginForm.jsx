@@ -7,15 +7,21 @@ export default function LoginForm() {
     const [password, setPassword] = useState("")
     const [loading, setLoading] = useState(false)
 
+
+    const setNotification = useNotifyStore((state) => state.setNotification)
+
+    const login = useAuthStore((state) => state.login)
+    const current_user = useAuthStore((state) => state.current_user)
+
+    
     const handleSubmit = async (e) => {
         setLoading(true)
         e.preventDefault()
 
         try {
-            await useAuthStore.getState().login(username, password)
+            await login(username, password)
         } catch (e) {
-            const setError = useNotifyStore.getState.setError
-            setError("Failed to Login.")
+            setNotification("error", "Failed to Login.")
         } finally {
             setLoading(false)
         }

@@ -1,38 +1,79 @@
-// import React, { useState, useEffect } from 'react'
-// import api from '@/api'
+import React, { useState, useEffect } from 'react'
+import api from '@/api'
 
-// const [sent, setSent] = useState(null)
-// const [received, setReceived] = useState(null)
+export default function RequestsSection({ accountUser }) {
 
-// useEffect(() => {
-//     const getRequestData = async () => {
-//         sent_res = await api.post('api/request-batch/', {
-//             "requests": accountUser.sent_requests
-//         })
-//         setSent(sent_res.data)
-//         sent_res = await api.post('api/request-batch/', {
-//             "requests": accountUser.received_requests
-//         })
-//         setReceived(sent_res.data)
+    const [sent, setSent] = useState(null)
+    const [received, setReceived] = useState(null)
 
-//     }
-//     getRequestData()
-// }, [])
+    useEffect(() => {
+        const getRequestData = async () => {
+
+            const url_base = 'api/request-batch/'
+
+            let path1 = "?"
+            let path2 = "?"
+
+            accountUser.sent_requests.forEach((id) => {
+                path1 += "id=" + id + "&"
+            })
+            const url1 = url_base + path1
+
+            const sent_res = await api.get(url1)
+            console.log(sent_res.data)
+            setSent(sent_res.data)
+
+            accountUser.received_requests.forEach((id) => {
+                path2 += "id=" + id + "&"
+            })
+            const url2 = url_base + path2
 
 
-// export default function RequestsSection({ accountUser }) {
-//     return (
-//         <>
-//             <div>
-//                 {sent.map((request) => (
-//                     <p>{request.status}</p>
-//                 ))}
-//             </div>
-//             <div>
-//                 {received.map((request) => (
-//                     <p>{request.status}</p>
-//                 ))}
-//             </div>
-//         </>
-//     )
-// }
+            const received_res = await api.get(url2)
+            console.log(received_res.data)
+            setReceived(received_res.data)
+        }
+        getRequestData()
+    }, [])
+
+    if (!sent || !received) {
+        return <p className='text-black'>loading...</p>
+    } else {
+        console.log("DONE")
+    }
+
+
+    return (
+        <>
+            <div className='bg-red'>
+                <h1 className='font-semibold underline mb-2'>Sent Requests</h1>
+                {sent.map((req) => {
+                    return (
+                        <div className='flex items-center'>
+                            <p className='justify-start'>{req.post.ticket} -</p>
+                            <p className='mx-2' >{req.recipient.username}</p>
+                            <p className='ml-auto border-1 border-gray-300 rounded-full py-1 px-2'>{req.status}</p>
+                        </div>
+                    )
+                })
+                }
+
+            </div>
+            <div className='bg-red'>
+                <h1 className='font-semibold underline my-2'>Received Requests</h1>
+
+                {received.map((req) => {
+                    return (
+                        <div className='flex items-center'>
+                            <p className='justify-start'>{req.post.ticket} -</p>
+                            <p className='mx-2' >{req.recipient.username}</p>
+                            <p className='ml-auto border-1 border-gray-300 rounded-full py-1 px-2'>{req.status}</p>
+                        </div>
+                    )
+                })
+                }
+
+            </div>
+        </>
+    )
+}

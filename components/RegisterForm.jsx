@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { use } from 'react'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import api from '@/api'
@@ -16,6 +16,8 @@ export default function LoginForm() {
     const [terms, setTerms] = useState(false)
     const router = useRouter()
 
+    const setNotification = useNotifyStore((state) => state.setNotification)
+
     const handleSubmit = async (e) => {
 
         e.preventDefault()
@@ -23,21 +25,17 @@ export default function LoginForm() {
 
         try {
             if (password1 !== password2) {
-                const setError = useNotifyStore.getState().setError
-                setError("Passwords Do Not Match")
+                setNotification("error", "Passwords Do Not Match")
             } else if (terms !== true) {
-                const setInfo = useNotifyStore.getState().setInfo
-                setInfo("Please Agree to the Terms & Conditions.")
+                setNotification("info", "Please Agree to the Terms & Conditions.")
             } else {
                 localStorage.clear()
-                const res = await api.post('/api/createUser/', { "username": username, "password": password1, "first_name": firstName, "last_name": lastName, "email": email })
-                const setSuccess = useNotifyStore.getState().setSuccess
-                setSuccess("Registration Successful.")
+                await api.post('/api/createUser/', { "username": username, "password": password1, "first_name": firstName, "last_name": lastName, "email": email })
+                setNotification("success", "Registration Successful.")
                 router.push('/login')
             }
         } catch (e) {
-            const setError = useNotifyStore.getState().setError
-            setError("Failed to create user.")
+            setNotification("error", "Failed to create user.")
         } finally {
             setLoading(false)
         }

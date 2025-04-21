@@ -5,11 +5,6 @@ import api from '@/api'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/constants'
 import { jwtDecode } from 'jwt-decode'
 
-export const useAccountStore = create(
-    (set) => ({
-        
-    })
-)
 
 export const useAuthStore = create(
     persist(
@@ -34,8 +29,7 @@ export const useAuthStore = create(
                     const user_data_res = await api.get('/api/users/' + decoded.user_id + '/')
                     const user_id = user_data_res.data.id
                     if (user_data_res.data.last_login === null) {
-                        const setInfo = useNotifyStore.getState().setInfo
-                        setInfo("Welcome to UniSwap! This is the Home Page, where you will find current listings for tickets.")
+                        useNotifyStore.getState().setNotification("info", "Welcome to UniSwap! This is the Home Page, where you will find current listings for tickets.")
                     }
                     set({ current_user: user_data_res.data })
                     await api.patch('/api/users/' + user_id + "/", {
@@ -43,8 +37,7 @@ export const useAuthStore = create(
                     })
                     router.push('/home')
                 } catch {
-                    const setError = useNotifyStore.getState().setError
-                    setError("Login Failed")
+                    useNotifyStore.getState().setNotification("error", "Login Failed")
                 }
             },
             refreshCurrentUser: async () => {
@@ -59,7 +52,8 @@ export const useAuthStore = create(
                 }
             }
         }), {
-        name: 'auth-storage'
+        name: 'auth-storage',
+        
     }
     ))
 
@@ -69,29 +63,11 @@ export const useNotifyStore = create(
         warn: null,
         info: null,
         success: null,
-        setError: (error) => {
-            set({ error: error })
+        setNotification: (notification_type, notification) => {
+            set({ [notification_type]: notification})
         },
-        setWarn: (warn) => {
-            set({ warn: warn })
-        },
-        setInfo: (info) => {
-            set({ info: info })
-        },
-        setSuccess: (success) => {
-            set({ success: success })
-        },
-        clearError: () => {
-            set({ error: null })
-        },
-        clearWarn: () => {
-            set({ warn: null })
-        },
-        clearInfo: () => {
-            set({ info: null })
-        },
-        clearSuccess: () => {
-            set({ success: null })
+        clearNotification: (notification_type) => {
+            set({ [notification_type]: null})
         }
     })
 )
