@@ -30,7 +30,7 @@ export default function AccountPage() {
           const user_res = await api.get("/api/users/" + username + "/")
           setAccountUser(user_res.data)
         } catch (error) {
-          useNotifyStore.getState().setError("404 This is not a user account.")
+          useNotifyStore.getState().setNotification("error", "404 This is not a user account.")
         }
       }
     }

@@ -11,8 +11,6 @@ export default function LoginForm() {
     const setNotification = useNotifyStore((state) => state.setNotification)
 
     const login = useAuthStore((state) => state.login)
-    const current_user = useAuthStore((state) => state.current_user)
-
     
     const handleSubmit = async (e) => {
         setLoading(true)

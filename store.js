@@ -9,50 +9,67 @@ import { jwtDecode } from 'jwt-decode'
 export const useAuthStore = create(
     persist(
         (set) => ({
-            status: false,
             current_user: null,
+            access: null,
+            refresh: null,
+            isHydrated: false,
+            setIsHydrated: (val) => {
+                set({isHydrated: val})
+            },
+            setAccess: (newToken) => {
+                set({access: newToken})
+            },
             logout: () => {
                 console.log("RUNNING LOGOUT")
-                set({ status: false })
-                localStorage.clear()
+                set({ current_user: null, access: null, refresh: null })             
                 router.push('/login')
             },
             login: async (username, password) => {
                 console.log("RUNNING LOGIN")
-                localStorage.clear()
-                set({ status: true })
+                set({access: null})
+                set({refresh: null})
+                set({current_user: null})
                 try {
                     const token_res = await api.post('/api/token/', { "username": username, "password": password })
-                    localStorage.setItem(ACCESS_TOKEN, token_res.data.access)
-                    localStorage.setItem(REFRESH_TOKEN, token_res.data.refresh)
+                    set({access: token_res.data.access})
+                    set({refresh: token_res.data.refresh})
                     const decoded = jwtDecode(token_res.data.access)
                     const user_data_res = await api.get('/api/users/' + decoded.user_id + '/')
                     const user_id = user_data_res.data.id
                     if (user_data_res.data.last_login === null) {
                         useNotifyStore.getState().setNotification("info", "Welcome to UniSwap! This is the Home Page, where you will find current listings for tickets.")
                     }
+                    console.log(user_data_res.data)
                     set({ current_user: user_data_res.data })
                     await api.patch('/api/users/' + user_id + "/", {
                         "last_login": new Date()
                     })
                     router.push('/home')
+                    console.log("ACCESS" + useAuthStore.getState().access)
                 } catch {
                     useNotifyStore.getState().setNotification("error", "Login Failed")
                 }
             },
             refreshCurrentUser: async () => {
                 try {
-                    const token = localStorage.getItem(ACCESS_TOKEN)
-                    const decoded = jwtDecode(token)
+                    const decoded = jwtDecode(useAuthStore.getState().access)
                     const user_data_res = await api.get('/api/users/' + decoded.user_id + '/')
                     set({ current_user: user_data_res.data })
                 } catch {
-                    const setError = useNotifyStore.getState().setError
-                    setError("Failed to get Current User")
+                    useNotifyStore.getState().setNotification("error", "Failed to refresh User")
                 }
             }
         }), {
         name: 'auth-storage',
+
+        onRehydrateStorage: () => {
+            return (state, error) => {
+                if (error || !state) {
+                    return state
+                }
+                state.setIsHydrated(true)
+            }
+        }
         
     }
     ))
@@ -68,6 +85,6 @@ export const useNotifyStore = create(
         },
         clearNotification: (notification_type) => {
             set({ [notification_type]: null})
-        }
+        },
     })
 )

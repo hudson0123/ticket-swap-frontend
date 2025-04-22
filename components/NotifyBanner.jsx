@@ -21,7 +21,7 @@ export default function NotificationBanner() {
                                     aria-label="close"
                                     color="inherit"
                                     size="small"
-                                    onClick={notification.clearNotification("error")}
+                                    onClick={() => notification.clearNotification("error")}
                                 >
                                     <CloseIcon fontSize="inherit" />
                                 </IconButton>
@@ -42,7 +42,7 @@ export default function NotificationBanner() {
                                     aria-label="close"
                                     color="inherit"
                                     size="small"
-                                    onClick={notification.clearNotification("warn")}
+                                    onClick={() => notification.clearNotification("warn")}
                                 >
                                     <CloseIcon fontSize="inherit" />
                                 </IconButton>
@@ -63,7 +63,7 @@ export default function NotificationBanner() {
                                     aria-label="close"
                                     color="inherit"
                                     size="small"
-                                    onClick={notification.clearNotification("info")}
+                                    onClick={() => notification.clearNotification("info")}
                                 >
                                     <CloseIcon fontSize="inherit" />
                                 </IconButton>
@@ -84,7 +84,7 @@ export default function NotificationBanner() {
                                     aria-label="close"
                                     color="inherit"
                                     size="small"
-                                    onClick={notification.clearNotification("success")}
+                                    onClick={() => notification.clearNotification("success")}
                                 >
                                     <CloseIcon fontSize="inherit" />
                                 </IconButton>

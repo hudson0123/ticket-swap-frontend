@@ -17,29 +17,40 @@ export default function RequestsSection({ accountUser }) {
             accountUser.sent_requests.forEach((id) => {
                 path1 += "id=" + id + "&"
             })
-            const url1 = url_base + path1
-
-            const sent_res = await api.get(url1)
-            console.log(sent_res.data)
-            setSent(sent_res.data)
 
             accountUser.received_requests.forEach((id) => {
                 path2 += "id=" + id + "&"
             })
+            const url1 = url_base + path1
             const url2 = url_base + path2
+            
+            const [sent_res, received_res] = await Promise.all([
+                api.get(url1),
+                api.get(url2)
+            ])
 
 
-            const received_res = await api.get(url2)
-            console.log(received_res.data)
+            setSent(sent_res.data)
             setReceived(received_res.data)
+
         }
         getRequestData()
     }, [])
 
+    const handleAccept = async (id) => {
+        await api.patch('api/requests/' + id + '/', {
+            status: "approved"
+        })
+    }
+
+    const handleDeny = async (id) => {
+        await api.patch('api/requests/' + id + '/', {
+            status: "rejected"
+        })
+    }
+
     if (!sent || !received) {
         return <p className='text-black'>loading...</p>
-    } else {
-        console.log("DONE")
     }
 
 
@@ -49,10 +60,16 @@ export default function RequestsSection({ accountUser }) {
                 <h1 className='font-semibold underline mb-2'>Sent Requests</h1>
                 {sent.map((req) => {
                     return (
-                        <div className='flex items-center'>
-                            <p className='justify-start'>{req.post.ticket} -</p>
-                            <p className='mx-2' >{req.recipient.username}</p>
-                            <p className='ml-auto border-1 border-gray-300 rounded-full py-1 px-2'>{req.status}</p>
+                        <div className='flex items-center text-sm my-1'>
+                            <p className='justify-start font-medium'>{req.post.ticket} -</p>
+                            <p className='mx-2 italic' >{req.recipient.username}</p>
+                            {req.status === "rejected" ? (
+                                <p className='ml-auto border-1 border-gray-500 bg-red-500 rounded-full py-1 px-2'>Rejected</p>
+                            ) : req.status === "accepted" ? (
+                                <p className='ml-auto border-1 border-gray-500 bg-green-500 rounded-full py-1 px-2'>Accepted</p>
+                            ) : (
+                                <p className='ml-auto border-1 border-gray-500 bg-gray-300 rounded-full py-1 px-2'>Sent</p>
+                            )}
                         </div>
                     )
                 })
@@ -64,10 +81,13 @@ export default function RequestsSection({ accountUser }) {
 
                 {received.map((req) => {
                     return (
-                        <div className='flex items-center'>
-                            <p className='justify-start'>{req.post.ticket} -</p>
-                            <p className='mx-2' >{req.recipient.username}</p>
-                            <p className='ml-auto border-1 border-gray-300 rounded-full py-1 px-2'>{req.status}</p>
+                        <div key={req.id} className='flex items-center text-sm my-1'>
+                            <p className='justify-start font-medium'>{req.post.ticket} -</p>
+                            <p className='mx-2 italic' >{req.recipient.username}</p>
+                            <div className='ml-auto'>
+                                <button onClick={() => handleDeny(req.id)}>X</button>
+                                <button onClick={() => handleAccept(req.id)} className='ml-2'>&#10003;</button>
+                            </div>
                         </div>
                     )
                 })

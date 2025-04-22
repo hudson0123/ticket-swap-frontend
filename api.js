@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { ACCESS_TOKEN, NEXT_PUBLIC_API_URL } from './constants';
+import { NEXT_PUBLIC_API_URL } from './constants';
+import { useAuthStore } from './store';
 
 const api = axios.create({
     baseURL: NEXT_PUBLIC_API_URL
@@ -7,7 +8,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem(ACCESS_TOKEN)
+        const token = useAuthStore.getState().access
         if (token) {
             config.headers.Authorization = `Bearer ${token}`
         }
