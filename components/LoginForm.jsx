@@ -1,23 +1,26 @@
+import useFormInput from '@/hooks/useFormInput'
 import { useAuthStore, useNotifyStore } from '@/store'
 import { useState } from 'react'
 
 export default function LoginForm() {
 
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
+    const { value: username, onChange: handleUsernameChange, reset: resetUsername } = useFormInput()
+    const { value: password, onChange: handlePasswordChange, reset: resetPassword } = useFormInput()
     const [loading, setLoading] = useState(false)
 
 
     const setNotification = useNotifyStore((state) => state.setNotification)
+    const clearAllNotifications = useNotifyStore((state) => state.clearAllNotifications)
 
     const login = useAuthStore((state) => state.login)
     
     const handleSubmit = async (e) => {
         setLoading(true)
         e.preventDefault()
-
         try {
             await login(username, password)
+            resetUsername()
+            resetPassword()
         } catch (e) {
             setNotification("error", "Failed to Login.")
         } finally {
@@ -32,14 +35,14 @@ export default function LoginForm() {
             <input
                 type="text"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={handleUsernameChange}
                 placeholder="Username"
                 className="border border-black bg-white rounded block mb-5 py-1 px-2"
             />
             <input
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handlePasswordChange}
                 placeholder="Password"
                 className="border border-black bg-white block rounded mb-5 py-1 px-2"
             />

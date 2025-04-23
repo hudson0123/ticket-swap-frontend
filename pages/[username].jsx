@@ -1,15 +1,12 @@
 import api from '@/api'
-import { useAuthStore, useNotifyStore } from '@/store'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import ExpandableSection from '@/components/ExpandableSection'
-import ContactInfoSection from '@/components/ContactInfoSection'
-import AccountInfoSection from '@/components/AccountInfoSection'
-import NotificationsSection from '@/components/NotificationsSection'
 import AccountCard from '@/components/AccountCard'
 import AccountCardLoading from '@/components/AccountCardLoading'
-import AdminRequestList from '@/components/AdminRequestList'
+import AccountInfoSection from '@/components/AccountInfoSection'
+import ExpandableSection from '@/components/ExpandableSection'
 import RequestsSection from '@/components/RequestsSection'
+import { useAuthStore, useNotifyStore } from '@/store'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 
 export default function AccountPage() {
   const [boxExpanded, setBoxExpanded] = useState("0")
@@ -47,10 +44,6 @@ export default function AccountPage() {
             <div className="flex flex-col gap-2 justify-center items-center py-10">
               <ExpandableSection id="4" title="Account Information" boxExpanded={boxExpanded} handleExpand={handleExpand}>
                 <AccountInfoSection accountUser={accountUser} onChange={dummyFunction} handleLogout={handleLogout} />
-              </ExpandableSection>
-
-              <ExpandableSection id="1" title="Notifications" boxExpanded={boxExpanded} handleExpand={handleExpand}>
-                <NotificationsSection />
               </ExpandableSection>
 
               <ExpandableSection id="3" title="Requests" boxExpanded={boxExpanded} handleExpand={handleExpand}>

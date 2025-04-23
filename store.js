@@ -35,11 +35,11 @@ export const useAuthStore = create(
                     set({refresh: token_res.data.refresh})
                     const decoded = jwtDecode(token_res.data.access)
                     const user_data_res = await api.get('/api/users/' + decoded.user_id + '/')
+                    set({access: token_res.data.access})
                     const user_id = user_data_res.data.id
                     if (user_data_res.data.last_login === null) {
                         useNotifyStore.getState().setNotification("info", "Welcome to UniSwap! This is the Home Page, where you will find current listings for tickets.")
                     }
-                    console.log(user_data_res.data)
                     set({ current_user: user_data_res.data })
                     await api.patch('/api/users/' + user_id + "/", {
                         "last_login": new Date()
@@ -86,5 +86,11 @@ export const useNotifyStore = create(
         clearNotification: (notification_type) => {
             set({ [notification_type]: null})
         },
+        clearAllNotifications: () => {
+            set({"error": null})
+            set({"info": null})
+            set({"warn": null})
+            set({"success": null})
+        }
     })
 )

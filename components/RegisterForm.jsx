@@ -3,35 +3,41 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import api from '@/api'
 import { useNotifyStore } from '@/store'
+import useFormInput from '@/hooks/useFormInput'
+import UseCheckBoxInput from '@/hooks/useCheckBoxInput'
 
-export default function LoginForm() {
+export default function RegisterForm() {
 
-    const [username, setUsername] = useState("")
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
-    const [email, setEmail] = useState("")
-    const [password1, setPassword1] = useState("")
-    const [password2, setPassword2] = useState("")
-    const [loading, setLoading] = useState(false)
-    const [terms, setTerms] = useState(false)
     const router = useRouter()
 
     const setNotification = useNotifyStore((state) => state.setNotification)
+    const [loading, setLoading] = useState(false)
+    const { value: username, onChange: handleUsernameChange, reset: resetUsername } = useFormInput("")
+    const { value: email, onChange: handleEmailChange, reset: resetEmail } = useFormInput("")
+    const { value: firstName, onChange: handleFirstNameChange, reset: resetFirstName } = useFormInput("")
+    const { value: lastName, onChange: handleLastNameChange, reset: resetLastName } = useFormInput("")
+    const { value: password1, onChange: handlePassword1Change, reset: resetPassword1 } = useFormInput("")
+    const { value: password2, onChange: handlePassword2Change, reset: resetPassword2 } = useFormInput("")
+    const { value: termsCheckBox, onChange: handleTermsCheckBoxToggle, reset: resetTermsCheckBox } = UseCheckBoxInput()
 
     const handleSubmit = async (e) => {
-
         e.preventDefault()
         setLoading(true)
-
         try {
             if (password1 !== password2) {
                 setNotification("error", "Passwords Do Not Match")
-            } else if (terms !== true) {
+            } else if (termsCheckBox !== true) {
                 setNotification("info", "Please Agree to the Terms & Conditions.")
             } else {
-                localStorage.clear()
                 await api.post('/api/createUser/', { "username": username, "password": password1, "first_name": firstName, "last_name": lastName, "email": email })
                 setNotification("success", "Registration Successful.")
+                resetUsername()
+                resetEmail()
+                resetFirstName()
+                resetLastName()
+                resetPassword1()
+                resetPassword2()
+                resetTermsCheckBox()
                 router.push('/login')
             }
         } catch (e) {
@@ -39,7 +45,6 @@ export default function LoginForm() {
         } finally {
             setLoading(false)
         }
-
     }
 
     return (
@@ -50,7 +55,7 @@ export default function LoginForm() {
                 id="username"
                 type="text"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={handleUsernameChange}
                 placeholder="Required"
                 className="border border-black bg-white rounded block mb-5 py-1 px-2 w-full"
 
@@ -60,43 +65,39 @@ export default function LoginForm() {
                 id="email"
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleEmailChange}
                 placeholder="Email"
                 className="border border-black bg-white rounded block mb-5 py-1 px-2 w-full"
-
             />
             <label className="text-white font-semibold" for="first_name">Full Name: </label>
             <br></br>
             <input
                 type="text"
                 value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
+                onChange={handleFirstNameChange}
                 placeholder="First"
                 className="border border-black bg-white rounded mb-5 py-1 px-2 mr-5"
-
             />
             <input
                 type="text"
                 value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
+                onChange={handleLastNameChange}
                 placeholder="Last"
                 className="border border-black bg-white rounded mb-5 py-1 px-2"
-
             />
             <br></br>
             <label className="text-white font-semibold" for="username">Pasword: </label>
             <input
                 type="password"
                 value={password1}
-                onChange={(e) => setPassword1(e.target.value)}
+                onChange={handlePassword1Change}
                 placeholder="Required"
                 className="border border-black bg-white rounded block mb-5 py-1 px-2 w-full"
-
             />
             <input
                 type="password"
                 value={password2}
-                onChange={(e) => setPassword2(e.target.value)}
+                onChange={handlePassword2Change}
                 placeholder="Required"
                 className="border border-black bg-white rounded block mb-5 py-1 px-2 w-full"
 
@@ -104,7 +105,7 @@ export default function LoginForm() {
             <input
                 type="checkbox"
                 id="terms"
-                onClick={() => { setTerms(!terms); console.log(terms) }}
+                onClick={handleTermsCheckBoxToggle}
                 />
             <label className="text-white font-semibold" for="terms"> I Agree to the Terms & Conditions</label><br></br>
             <button type="submit" className="text-white border-1 my-5 black py-1 px-2 hover:border-gray-300 transition duration-200">
