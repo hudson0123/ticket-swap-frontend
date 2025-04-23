@@ -1,6 +1,6 @@
 import PostCard from './PostCard'
 
-export default function PostCardGrid({posts, users}) {
+export default function PostCardGrid({posts}) {
 
     return (
         <div className="grid grid-cols-1 w-screen place-items-center gap-2 sm:gap-10 p-10">
@@ -8,7 +8,6 @@ export default function PostCardGrid({posts, users}) {
                 <PostCard 
                     key = {post.id}
                     post = {post}
-                    users = {users}
                 />
             ))}
         </div>

@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 
-export default function PostCard({ post, users }) {
+export default function PostCard({ post }) {
 
     const setError = useNotifyStore((state) => state.setError)
     const setSuccess = useNotifyStore((state) => state.setSuccess)
@@ -30,11 +30,7 @@ export default function PostCard({ post, users }) {
 
     }
 
-    const getUserById = (post_id) => {
-        return users.find(user => user.id === post_id)
-    }
 
-    const postUser = getUserById(post.author)
     const currentUser = useAuthStore((state) => state.current_user)
 
     return (
@@ -42,7 +38,7 @@ export default function PostCard({ post, users }) {
             <Card variant="outlined" sx={{background: ''}}>
                 <CardContent>
                     <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
-                        @{postUser?.username || 'unknown'}
+                        @{post.author.username} {post.author.is_verified_uga && "(Verified)"}
                     </Typography>
                     <Typography variant="h5" component="div">
                         {post.ticket}

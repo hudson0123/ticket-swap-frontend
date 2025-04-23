@@ -3,6 +3,9 @@ import LoginForm from '@/components/LoginForm'
 
 export default function login() {
 
+  useEffect(() => {
+    localStorage.clear()
+  })
 
   return (
     <div className="flex flex-col-1 justify-center items-center h-[80dvh]">
