@@ -4,6 +4,9 @@ import { useRouter } from 'next/router'
 import { PROTECTED_ROUTES } from "@/constants";
 import Navbar from "@/components/Navbar";
 import NotifyBanner from "@/components/NotifyBanner";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient()
 
 export default function App({ Component, pageProps }) {
 
@@ -12,18 +15,22 @@ export default function App({ Component, pageProps }) {
 
 
   return isProtected ? (
-    <ProtectedRoute>
-      <Navbar />
-      <div className="pt-20"></div>
-      <NotifyBanner />
-      <Component {...pageProps} />
-    </ProtectedRoute>
+    <QueryClientProvider client={queryClient}>
+      <ProtectedRoute>
+        <Navbar />
+        <div className="pt-20"></div>
+        <NotifyBanner />
+        <Component {...pageProps} />
+      </ProtectedRoute>
+    </QueryClientProvider>
   ) : (
     <>
-      <Navbar />
-      <div className="pt-20"></div>
-      <NotifyBanner />
-      <Component {...pageProps} />
+      <QueryClientProvider client={queryClient}>
+        <Navbar />
+        <div className="pt-20"></div>
+        <NotifyBanner />
+        <Component {...pageProps} />
+      </QueryClientProvider>
     </>
   )
 }

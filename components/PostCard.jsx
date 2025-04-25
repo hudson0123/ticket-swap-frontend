@@ -11,8 +11,7 @@ import Divider from '@mui/material/Divider';
 
 export default function PostCard({ post }) {
 
-    const setError = useNotifyStore((state) => state.setError)
-    const setSuccess = useNotifyStore((state) => state.setSuccess)
+    const setNotification = useNotifyStore((state) => state.setNotification)
 
     const sendRequest = async () => {
 
@@ -22,10 +21,10 @@ export default function PostCard({ post }) {
                 "recipient": post.author,
                 "post": post.id
             })
-            setSuccess("Sent Request.")
+            setNotification("success", "Sent Request.")
         }
         catch (e) {
-            setError("Failed to Sent Request.")
+            setNotification("error", "Failed to Sent Request.")
         }
 
     }

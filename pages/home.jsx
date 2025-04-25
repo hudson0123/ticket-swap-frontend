@@ -1,36 +1,86 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
-import PostCardGrid from '@/components/PostCardGrid'
 import api from '@/api'
-import { useNotifyStore } from '@/store'
+import PostCardGrid from '@/components/PostCardGrid'
 import SearchBar from '@/components/SearchBar'
+import { useNotifyStore } from '@/store'
+import { LastPage } from '@mui/icons-material'
+import CircularProgress from '@mui/material/CircularProgress'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { useState, useEffect } from 'react'
+import { useInView } from 'react-intersection-observer'
+import { LinearProgress } from '@mui/material'
+
+const queryPosts = async ({ pageParam }) => {
+    const res = await api.get('api/posts/?page=' + pageParam)
+    return res.data
+}
 
 export default function home() {
 
-    const [posts, setPosts] = useState([])
     const [searchTerm, setSearchTerm] = useState("")
+    // const { data, isPending, error, refetch } = useQuery({
+    //     queryKey: ['posts'],
+    //     queryFn: queryPosts
+    // })
+    const { data, error, isError, isPending, fetchNextPage, hasNextPage } = useInfiniteQuery({
+        queryKey: ["posts"],
+        queryFn: queryPosts,
+        initialPageParam: 1,
+        getNextPageParam: (lastpage) => {
+            if (!lastpage.next) return null
+            const url = new URL(lastpage.next)
+            return url.searchParams.get("page")
+        }
+
+    })
+    console.log(data)
+    const { ref, inView } = useInView()
+
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await api.get('api/posts').then(res => setPosts(res.data))
-            } catch (e) {
-                useNotifyStore.getState().setNotification("error", "Failed to get Posts")
-            }
+        if (inView) {
+            fetchNextPage()
         }
-        fetchData()
-    }, []);
+    }, [fetchNextPage, inView])
 
+    if (isPending) {
+        return (
+            <div className='flex justify-center items-center h-[80vh]'>
+                <CircularProgress size="5rem" />
+            </div>
+        )
+    } else if (isError) {
+        return
+    }
 
     return (
-        <div className="flex flex-col">
-            <SearchBar
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
-            />
-            <PostCardGrid
-                posts={posts.filter((post) => post.ticket.toLowerCase().includes(searchTerm.toLowerCase()))}
-            />
-        </div>
+        <>
+            <div className="flex flex-col">
+                <SearchBar
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                />
+                {data.pages.map((page) => {
+                    return (
+                        <PostCardGrid
+                            posts={page.results.filter((post) => post.ticket.toLowerCase().includes(searchTerm.toLowerCase()))}
+                        />
+                    )
+                })
+                }
+            </div>
+            <div className="relative">
+                {hasNextPage ? (
+                    <div className='mt-5'>
+                        <LinearProgress />
+                    </div>
+                ): (
+                    <div className='flex flex-col w-full justify-center align-middle my-5'>
+                        <h2 className='font-bold text-white ml-auto mr-auto'>That's all the posts we have :)</h2>
+                    </div>
+                )}
+                <div ref={ref} className='absolute top-[-200px]'></div>
+            </div>
+        </>
     )
+
 }
