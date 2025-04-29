@@ -14,7 +14,7 @@ export default function NotificationBanner() {
         <div className='fixed w-screen'>
             {notification.error !== null ? (
                 <Box sx={{ width: '100%'}}>
-                    <Collapse in={open}>
+                    <Collapse in={true}>
                         <Alert
                             action={
                                 <IconButton

@@ -17,11 +17,7 @@ const queryPosts = async ({ pageParam }) => {
 export default function home() {
 
     const [searchTerm, setSearchTerm] = useState("")
-    // const { data, isPending, error, refetch } = useQuery({
-    //     queryKey: ['posts'],
-    //     queryFn: queryPosts
-    // })
-    const { data, error, isError, isPending, fetchNextPage, hasNextPage } = useInfiniteQuery({
+    const { data, error, isPending, fetchNextPage, hasNextPage } = useInfiniteQuery({
         queryKey: ["posts"],
         queryFn: queryPosts,
         initialPageParam: 1,
@@ -48,7 +44,9 @@ export default function home() {
                 <CircularProgress size="5rem" />
             </div>
         )
-    } else if (isError) {
+    }
+    
+    if (error) {
         return
     }
 

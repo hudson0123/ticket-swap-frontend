@@ -8,33 +8,30 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
+import { useMutation } from '@tanstack/react-query';
 
 export default function PostCard({ post }) {
 
     const setNotification = useNotifyStore((state) => state.setNotification)
 
-    const sendRequest = async () => {
-
-        try {
-            await api.post('/api/requests/', {
-                "sender": currentUser.id,
-                "recipient": post.author,
-                "post": post.id
+    const createRequestMutation = useMutation({
+        mutationFn: (request) => {
+            return api.post('/api/requests/', {
+                "sender_id": request.sender_id,
+                "post_id": request.post_id
             })
+        },
+        onError: (error) => {
+            setNotification("error", JSON.stringify(error.response.data))
+        },
+        onSuccess: () => {
             setNotification("success", "Sent Request.")
         }
-        catch (e) {
-            setNotification("error", "Failed to Sent Request.")
-        }
-
-    }
-
-
-    const currentUser = useAuthStore((state) => state.current_user)
+    })
 
     return (
         <Box sx={{ minWidth: '90dvw', }}>
-            <Card variant="outlined" sx={{background: ''}}>
+            <Card variant="outlined" sx={{ background: '' }}>
                 <CardContent>
                     <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
                         @{post.author.username} {post.author.is_verified_uga && "(Verified)"}
@@ -46,7 +43,12 @@ export default function PostCard({ post }) {
                     <Divider />
                 </CardContent>
                 <CardActions>
-                    <Button onClick={sendRequest} size="small">Send Request</Button>
+                    <Button onClick={() => {
+                        createRequestMutation.mutate({
+                            sender_id: post.author.id,
+                            post_id: post.id,
+                        })
+                    }} size="small">Send Request</Button>
                 </CardActions>
             </Card>
         </Box>

@@ -8,7 +8,7 @@ export default function Navbar() {
 
     const current_user = useAuthStore((state) => state.current_user)
 
-    console.log(current_user)
+    // console.log(current_user)
 
     return (
         <>
