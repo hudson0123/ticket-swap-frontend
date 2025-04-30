@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import api from '@/api'
+import Image from 'next/image'
 
 export default function AdminPostList() {
 
@@ -41,7 +42,7 @@ export default function AdminPostList() {
             <hr className="hidden md:block" />
             <div className="flex flex-col md:flex-row md:items-center justify-between p-2 rounded-lg mx-10 my-0">
                 <div className="flex items-center mb-2 md:mb-0">
-                    <img className="w-10 h-10 mr-4" src="/user.png" alt="User icon" />
+                    <Image width={10} height={10} className="w-10 h-10 mr-4" src="/user.png" alt="User icon" />
                     <span className="font-bold">Author</span>
                 </div>
                 <div className="flex flex-col md:flex-row md:gap-28 text-sm md:text-base font-bold">
@@ -58,7 +59,7 @@ export default function AdminPostList() {
                     {posts.map(post => (
                         <div key={post.id} className="flex flex-col md:flex-row md:items-center justify-between p-2 rounded-lg">
                             <div className="flex items-center mb-2 md:mb-0">
-                                <img className="w-10 h-10 mr-4" src="/user.png" alt="User icon" />
+                                <Image width={10} height={10} className="w-10 h-10 mr-4" src="/user.png" alt="User icon" />
                                 <span className="font-bold">{getUsernamebyId(post.author)}</span>
                             </div>
                             <div className="flex flex-col md:flex-row md:gap-34 text-sm md:text-base mr-5">

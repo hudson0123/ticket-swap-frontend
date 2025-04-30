@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import api from '@/api'
 import { useNotifyStore } from '@/store'
-import useFormInput from '@/hooks/useFormInput'
+import useForm from '@/hooks/useForm'
 import UseCheckBoxInput from '@/hooks/useCheckBoxInput'
 
 export default function RegisterForm() {
@@ -12,12 +12,12 @@ export default function RegisterForm() {
 
     const setNotification = useNotifyStore((state) => state.setNotification)
     const [loading, setLoading] = useState(false)
-    const { value: username, onChange: handleUsernameChange, reset: resetUsername } = useFormInput("")
-    const { value: email, onChange: handleEmailChange, reset: resetEmail } = useFormInput("")
-    const { value: firstName, onChange: handleFirstNameChange, reset: resetFirstName } = useFormInput("")
-    const { value: lastName, onChange: handleLastNameChange, reset: resetLastName } = useFormInput("")
-    const { value: password1, onChange: handlePassword1Change, reset: resetPassword1 } = useFormInput("")
-    const { value: password2, onChange: handlePassword2Change, reset: resetPassword2 } = useFormInput("")
+    const { value: username, onChange: handleUsernameChange, reset: resetUsername } = useForm("")
+    const { value: email, onChange: handleEmailChange, reset: resetEmail } = useForm("")
+    const { value: firstName, onChange: handleFirstNameChange, reset: resetFirstName } = useForm("")
+    const { value: lastName, onChange: handleLastNameChange, reset: resetLastName } = useForm("")
+    const { value: password1, onChange: handlePassword1Change, reset: resetPassword1 } = useForm("")
+    const { value: password2, onChange: handlePassword2Change, reset: resetPassword2 } = useForm("")
     const { value: termsCheckBox, onChange: handleTermsCheckBoxToggle, reset: resetTermsCheckBox } = UseCheckBoxInput()
 
     const handleSubmit = async (e) => {

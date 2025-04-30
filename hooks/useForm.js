@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 
-export default function useFormInput(initial_value = '') {
+export default function useForm(initial_value = '') {
 
     const [value, setValue] = useState(initial_value)
 

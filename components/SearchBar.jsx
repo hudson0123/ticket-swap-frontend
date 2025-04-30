@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import Image from 'next/image'
 
 export default function SearchBar({searchTerm, setSearchTerm}) {
 
@@ -15,7 +16,9 @@ export default function SearchBar({searchTerm, setSearchTerm}) {
 
     return (
         <div className="flex items-center gap-3 mx-5">
-            <img
+            <Image 
+                width={10} 
+                height={10}
                 className="w-6 h-6 cursor-pointer fixed bottom-4 left-4"
                 src="/search.svg"
                 onClick={handleSearchBar}

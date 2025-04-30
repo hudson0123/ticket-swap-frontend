@@ -1,29 +1,33 @@
 import React, { useState } from 'react'
 import api from '@/api'
 import { useRouter } from 'next/router'
-import { jwtDecode } from 'jwt-decode'
-import { ACCESS_TOKEN } from '@/constants'
+import { useAuthStore, useNotifyStore } from '@/store'
+import useForm from '@/hooks/useForm'
+import UseCheckBoxInput from '@/hooks/useCheckBoxInput'
 
 export default function CreatePostForm() {
 
-    const [title, setTitle] = useState("")
-    const [price, setPrice] = useState(0)
-    const [description, setDescription] = useState("")
-    const [category, setCategory] = useState("")
-    const [time, setTime] = useState("")
-    const [location, setLocation] = useState("")
-    const [sponsored, setSponsored] = useState(false)
     const [loading, setLoading] = useState(false)
     const router = useRouter()
+
+    const {value: title, onChange: onTitleChange, reset: titleReset} = useForm("")
+    const {value: price, onChange: onPriceChange, reset: priceReset} = useForm("")
+    const {value: description, onChange: onDescriptionChange, reset: descriptionReset} = useForm("")
+    const {value: category, onChange: onCategoryChange, reset: categoryReset} = useForm("")
+    const {value: time, onChange: onTimeChange, reset: timeReset} = useForm("")
+    const {value: location, onChange: onLocationChange, reset: locationReset} = useForm("")
+    const {value: sponsored, onChange: toggleSponsored, reset: sponsoredReset} = UseCheckBoxInput()
+
+
+    const current_user = useAuthStore((state) => state.current_user)
+    const setNotification = useNotifyStore((state) => state.setNotification)
 
     const handleSubmit = async (e) => {
         setLoading(true)
         e.preventDefault()
-        const token = localStorage.getItem(ACCESS_TOKEN)
-        const current_user = jwtDecode(token).user_id
         try {
-            const res = await api.post('/api/posts/', {
-                "author": current_user,
+            await api.post('/api/posts/', {
+                "author_id": current_user.id,
                 "ticket": title,
                 "ticket_price": price,
                 "description": description,
@@ -32,9 +36,16 @@ export default function CreatePostForm() {
                 "meetup_location": location,
                 "is_sponsored": sponsored,
             })
+            titleReset()
+            priceReset()
+            descriptionReset()
+            categoryReset()
+            timeReset()
+            locationReset()
+            sponsoredReset()
             router.push('/home')
         } catch (e) {
-            alert(e)
+            setNotification("error", e.message)
         } finally {
             setLoading(false)
         }
@@ -46,40 +57,40 @@ export default function CreatePostForm() {
             <input
                 type="text"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={onTitleChange}
                 placeholder="Ticket Title"
                 className="border border-black bg-white rounded block mb-5 py-1 px-2 w-full"
             />
             <input
                 type="number"
                 value={price}
-                onChange={(e) => setPrice(e.target.value)}
+                onChange={onPriceChange}
                 placeholder="Price"
                 className="border border-black bg-white rounded block mb-5 py-1 px-2 w-full"
             />
             <textarea
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={onDescriptionChange}
                 placeholder="Description"
                 className="border border-black bg-white rounded block mb-5 py-1 px-2 w-full"
             />
             <input
                 type="text"
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={onCategoryChange}
                 placeholder="Category"
                 className="border border-black bg-white rounded block mb-5 py-1 px-2 w-full"
             />
             <input
                 type="datetime-local"
                 value={time}
-                onChange={(e) => setTime(e.target.value)}
+                onChange={onTimeChange}
                 className="border border-black bg-white rounded block mb-5 py-1 px-2 w-full"
             />
             <input
                 type="text"
                 value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                onChange={onLocationChange}
                 placeholder="Location"
                 className="border border-black bg-white rounded block mb-5 py-1 px-2 w-full"
             />
@@ -87,7 +98,7 @@ export default function CreatePostForm() {
                 <input
                     type="checkbox"
                     checked={sponsored}
-                    onChange={(e) => setSponsored(e.target.checked)}
+                    onChange={toggleSponsored}
                 />
                 Sponsor Post
             </label>

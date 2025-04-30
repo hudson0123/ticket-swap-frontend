@@ -1,11 +1,12 @@
-import useFormInput from '@/hooks/useFormInput'
+import useForm from '@/hooks/useForm'
 import { useAuthStore, useNotifyStore } from '@/store'
 import { useState } from 'react'
+import Link from 'next/link'
 
 export default function LoginForm() {
 
-    const { value: username, onChange: handleUsernameChange, reset: resetUsername } = useFormInput()
-    const { value: password, onChange: handlePasswordChange, reset: resetPassword } = useFormInput()
+    const { value: username, onChange: handleUsernameChange, reset: resetUsername } = useForm()
+    const { value: password, onChange: handlePasswordChange, reset: resetPassword } = useForm()
     const [loading, setLoading] = useState(false)
 
 
@@ -21,7 +22,6 @@ export default function LoginForm() {
             await login(username, password)
             resetUsername()
             resetPassword()
-
         } catch (e) {
             setNotification("error", "Failed to Login.")
         } finally {
@@ -50,7 +50,7 @@ export default function LoginForm() {
             <button type="submit" className="text-white border-1 mb-3 black py-1 px-2 hover:border-gray-300 transition duration-200">
                 {loading ? "Loading..." : "Login"}
             </button>
-            <p className="text-sm text-white">Don't Have an account? Register <a className="italic " href="/register">here</a>.</p>
+            <p className="text-sm text-white">Don't Have an account? Register <Link className="italic " href="/register">here</Link>.</p>
         </form>
     )
 }

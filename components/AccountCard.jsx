@@ -1,10 +1,13 @@
 import React from 'react'
+import Image from 'next/image'
 
 export default function AccountCard({ accountUser, currentUser }) {
   return (
     <div className="relative w-full max-w-md rounded-2xl border-2 border-white bg-gradient-to-br from-[#1e1e2f] to-[#2c2c3f] px-6 py-12 text-white shadow-lg">
       <div className="flex flex-col items-center text-center">
-        <img
+        <Image 
+          width={10} 
+          height={10}
           className="w-24 h-24 border-2 border-white rounded-full mb-4"
           src="/profile.svg"
           alt="Profile"
