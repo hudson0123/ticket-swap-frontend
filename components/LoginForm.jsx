@@ -21,6 +21,7 @@ export default function LoginForm() {
             await login(username, password)
             resetUsername()
             resetPassword()
+
         } catch (e) {
             setNotification("error", "Failed to Login.")
         } finally {
