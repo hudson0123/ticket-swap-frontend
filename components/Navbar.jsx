@@ -9,6 +9,8 @@ export default function Navbar() {
     const router = useRouter()
     const current_user = useAuthStore((state) => state.current_user)
 
+    console.log(current_user)
+
     return (
         <>
             {/* If the user is logged in. */}
@@ -20,7 +22,7 @@ export default function Navbar() {
                         </Link>
                         <div className='flex justify-end items-center'>
                             <Link href={"/" + current_user.username} className="invisible md:visible text-white hover:underline">@{current_user.username}</Link>
-                            <Link href={"/" + current_user.username}><Image width={10} height={10} className="w-10 h-10 border-3 ml-2 border-white rounded-full " src="/profile.svg" alt="user-profile" /></Link>
+                            <Link href={"/" + current_user.username}><Image width={100} height={100} className="w-12 h-12 ml-2 rounded-full border-1 border-gray-300 hover:ring-1 ring-white transform duration-100" src={current_user.profile_picture ? current_user.profile_picture : "http://www.w3.org/2000/svg"} alt="user-profile" /></Link>
                         </div>
 
                     </div>

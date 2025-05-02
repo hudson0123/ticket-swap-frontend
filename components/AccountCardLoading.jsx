@@ -8,7 +8,7 @@ export default function AccountCard({ accountUser, currentUser }) {
                 <Image 
                     width={10} 
                     height={10}
-                    className="w-24 h-24 border-2 border-white rounded-full mb-4"
+                    className="w-24 h-24rounded-full mb-4"
                     src="/profile.svg"
                     alt="Profile"
                 />

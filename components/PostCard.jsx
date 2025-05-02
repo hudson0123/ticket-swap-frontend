@@ -30,7 +30,16 @@ export default function PostCard({ post }) {
     })
 
     return (
-        <Box sx={{ minWidth: '90dvw', }}>
+        // <div className='bg-white rounded border-1 shadow px-3 py-3 w-full h-fit mb-2'>
+        //     <div className='flex flex-rows'>
+        //         <p className='text-lg font-semibold'>{post.ticket}</p>
+        //         <p className='ml-auto'>@{post.author.username}</p>
+        //     </div>
+        //     <div>
+        //         <p className=''>${post.ticket_price}</p>
+        //     </div>
+        // </div>
+        <Box sx={{ minWidth: '90dvw', marginBottom: '10px', marginX: '10px'}}>
             <Card variant="outlined" sx={{ background: '' }}>
                 <CardContent>
                     <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>

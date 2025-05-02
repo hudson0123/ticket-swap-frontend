@@ -2,7 +2,6 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import router from 'next/router'
 import api from '@/api'
-import { useQuery } from '@tanstack/react-query'
 
 export const useAuthStore = create(
     persist(
@@ -18,7 +17,6 @@ export const useAuthStore = create(
                 set({access: newToken})
             },
             logout: () => {
-                console.log("RUNNING LOGOUT")
                 set({ current_user: null, access: null, refresh: null })             
                 router.push('/login')
             },

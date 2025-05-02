@@ -42,7 +42,6 @@ export default function RequestsSection() {
 
     // Check Pending or Error
     if (sent_isPending || received_isPending) {
-        console.log("PENDING")
         return
     }
 

@@ -10,7 +10,7 @@ export default function ExpandableSection({ id, title, boxExpanded, handleExpand
             <Image width={10} height={10} src="dropdown.svg" alt="dropdown-icon" className={`h-10 w-10 transition-transform duration-150 ${isExpanded ? 'rotate-180' : 'rotate-0'}`} />
           </button>
         </div>
-        <div className={`overflow-y-hidden transition-max-height duration-150 ${isExpanded ? 'max-h-screen mt-5' : 'max-h-0'}`}>
+        <div className={`overflow-y-scroll transition-max-height duration-150 ${isExpanded ? 'max-h-60 mt-5' : 'max-h-0'}`}>
           {children}
         </div>
       </div>

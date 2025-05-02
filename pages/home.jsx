@@ -27,7 +27,6 @@ export default function home() {
         }
 
     })
-    console.log(data)
     const { ref, inView } = useInView()
 
 
